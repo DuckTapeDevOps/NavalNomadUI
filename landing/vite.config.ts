@@ -5,6 +5,11 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: '/NavalNomadUI/', // This should match your GitHub repository name
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: true,
+  },
   server: {
     host: true, // This enables listening on all network interfaces
     port: 5173,
