@@ -2,6 +2,8 @@
 
 A platform connecting boat owners (Shiplords) with digital nomads seeking to live aboard boats.
 
+<!-- Triggering new build -->
+
 ## Project Structure
 
 - `/landing` - React landing page built with Vite
