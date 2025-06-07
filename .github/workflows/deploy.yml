@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_ROLE_ARN: arn:aws:iam::279843290636:role/github-actions-deployer
-  S3_BUCKET_NAME: naval-nomad-frontend
+  S3_BUCKET_NAME: navalnomad.com
   CLOUDFRONT_DISTRIBUTION_ID: E35VTEQJ8DGT8T
 
 permissions:
