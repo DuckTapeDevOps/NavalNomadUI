@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/NavalNomadUI/', // This should match your GitHub repository name
+  base: '/', // Changed from '/NavalNomadUI/' to '/' for your domain
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
