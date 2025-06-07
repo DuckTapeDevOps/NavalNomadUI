@@ -1,8 +1,44 @@
-import { Box, Container, Heading, SimpleGrid, Text, VStack, Button, List, ListItem, ListIcon } from '@chakra-ui/react'
+import { Box, Container, Heading, SimpleGrid, Text, VStack, Button, List, ListItem, ListIcon, Image, Link, HStack, Icon } from '@chakra-ui/react'
 import { Link as RouterLink } from 'react-router-dom'
 import { CheckCircleIcon } from '@chakra-ui/icons'
+import { FaInstagram, FaYoutube } from 'react-icons/fa'
 
 const Home = () => {
+  const influencers = [
+    {
+      name: "Sailing La Vagabonde",
+      handle: "@sailinglavagabonde",
+      platform: "youtube",
+      followers: "2.8M",
+      description: "Riley and Elayna's journey from Australia to the world",
+      image: "https://i.ytimg.com/vi/your-video-id/maxresdefault.jpg"
+    },
+    {
+      name: "Sailing Uma",
+      handle: "@sailinguma",
+      platform: "youtube",
+      followers: "1.2M",
+      description: "Dan and Kika's minimalist sailing adventures",
+      image: "https://i.ytimg.com/vi/your-video-id/maxresdefault.jpg"
+    },
+    {
+      name: "Sailing Zatara",
+      handle: "@sailingzatara",
+      platform: "youtube",
+      followers: "1.5M",
+      description: "Family of 6 living and sailing around the world",
+      image: "https://i.ytimg.com/vi/your-video-id/maxresdefault.jpg"
+    },
+    {
+      name: "Sailing Doodles",
+      handle: "@sailingdoodles",
+      platform: "instagram",
+      followers: "500K",
+      description: "Daily life and adventures of a liveaboard couple",
+      image: "https://instagram.com/your-image.jpg"
+    }
+  ]
+
   return (
     <Container maxW="container.xl" py={10}>
       <VStack spacing={16} align="stretch">
@@ -82,6 +118,87 @@ const Home = () => {
                 </VStack>
               </Box>
             </SimpleGrid>
+          </VStack>
+        </Box>
+
+        {/* Naval Nomad Influencers Section */}
+        <Box>
+          <VStack spacing={8} align="stretch">
+            <Box textAlign="center">
+              <Heading as="h2" size="xl" mb={4}>
+                🌊 Meet the Naval Nomads
+              </Heading>
+              <Text fontSize="lg" maxW="2xl" mx="auto">
+                Get inspired by real people living the liveaboard dream. 
+                Follow their journeys and see how they've made this lifestyle their reality.
+              </Text>
+            </Box>
+
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={8}>
+              {influencers.map((influencer) => (
+                <Box
+                  key={influencer.name}
+                  p={6}
+                  shadow="md"
+                  borderWidth="1px"
+                  borderRadius="lg"
+                  _hover={{ shadow: "lg" }}
+                  transition="all 0.2s"
+                >
+                  <VStack align="start" spacing={4}>
+                    <Box
+                      width="100%"
+                      height="200px"
+                      bg="gray.100"
+                      borderRadius="md"
+                      overflow="hidden"
+                    >
+                      <Image
+                        src={influencer.image}
+                        alt={influencer.name}
+                        objectFit="cover"
+                        width="100%"
+                        height="100%"
+                      />
+                    </Box>
+                    <VStack align="start" spacing={2} width="100%">
+                      <Heading as="h3" size="md">
+                        {influencer.name}
+                      </Heading>
+                      <HStack>
+                        <Icon
+                          as={influencer.platform === 'youtube' ? FaYoutube : FaInstagram}
+                          color={influencer.platform === 'youtube' ? 'red.500' : 'pink.500'}
+                        />
+                        <Text color="gray.600">{influencer.handle}</Text>
+                      </HStack>
+                      <Text fontSize="sm" color="gray.500">
+                        {influencer.followers} followers
+                      </Text>
+                      <Text>{influencer.description}</Text>
+                      <Button
+                        as={Link}
+                        href={`https://${influencer.platform}.com/${influencer.handle}`}
+                        isExternal
+                        colorScheme={influencer.platform === 'youtube' ? 'red' : 'pink'}
+                        variant="outline"
+                        width="100%"
+                      >
+                        Follow on {influencer.platform === 'youtube' ? 'YouTube' : 'Instagram'}
+                      </Button>
+                    </VStack>
+                  </VStack>
+                </Box>
+              ))}
+            </SimpleGrid>
+
+            <Box textAlign="center" mt={4}>
+              <Text fontSize="lg" color="gray.600">
+                These creators show that the liveaboard lifestyle isn't just a dream—it's a reality for many.
+                <br />
+                And with Naval Nomad, it can be your reality too.
+              </Text>
+            </Box>
           </VStack>
         </Box>
 
