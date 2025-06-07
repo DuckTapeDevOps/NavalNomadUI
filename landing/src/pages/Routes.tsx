@@ -1,6 +1,6 @@
 import { Box, Container, Heading, Text, VStack, SimpleGrid, Button, Badge } from '@chakra-ui/react'
 
-const Routes = () => {
+const RouteExplorer = () => {
   const routes = [
     {
       name: "Florida Keys Loop",
@@ -122,4 +122,4 @@ const Routes = () => {
   )
 }
 
-export default Routes 
+export default RouteExplorer 

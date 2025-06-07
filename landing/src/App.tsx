@@ -4,7 +4,7 @@ import { Navbar } from './components/Navbar'
 import Home from './pages/Home'
 import LiveaboardGuides from './pages/LiveaboardGuides'
 import MarinaExplorer from './pages/MarinaExplorer'
-import Routes from './pages/Routes'
+import RouteExplorer from './pages/Routes'
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/liveaboard-guides" element={<LiveaboardGuides />} />
             <Route path="/marina-explorer" element={<MarinaExplorer />} />
-            <Route path="/routes" element={<Routes />} />
+            <Route path="/routes" element={<RouteExplorer />} />
           </Routes>
         </Box>
       </Router>
