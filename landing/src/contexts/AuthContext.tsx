@@ -1,5 +1,12 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { Auth } from 'aws-amplify'
+import { createContext, useContext, useState, useEffect } from 'react'
+import type { ReactNode } from 'react'
+import { signInWithRedirect, signOut as amplifySignOut, getCurrentUser, fetchUserAttributes, updateUserAttributes } from 'aws-amplify/auth'
+
+interface CustomAttributes {
+  'custom:naval_nomad_status'?: string
+  'custom:instagram_handle'?: string
+  'custom:youtube_channel'?: string
+}
 
 interface User {
   id: string
@@ -13,7 +20,7 @@ interface User {
 interface AuthContextType {
   user: User | null
   loading: boolean
-  signIn: () => Promise<void>
+  signIn: () => void
   signOut: () => Promise<void>
   linkInstagram: (handle: string) => Promise<void>
   linkYouTube: (channel: string) => Promise<void>
@@ -32,16 +39,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function checkUser() {
     try {
-      const currentUser = await Auth.currentAuthenticatedUser()
-      const attributes = await Auth.currentUserInfo()
+      const currentUser = await getCurrentUser()
+      const attributes = await fetchUserAttributes()
       
       setUser({
-        id: attributes.username,
-        email: attributes.attributes.email,
-        name: attributes.attributes.name,
-        navalNomadStatus: attributes.attributes['custom:naval_nomad_status'],
-        instagramHandle: attributes.attributes['custom:instagram_handle'],
-        youtubeChannel: attributes.attributes['custom:youtube_channel']
+        id: attributes.sub || '',
+        email: attributes.email || '',
+        name: attributes.name || '',
+        navalNomadStatus: attributes['custom:naval_nomad_status'],
+        instagramHandle: attributes['custom:instagram_handle'],
+        youtubeChannel: attributes['custom:youtube_channel']
       })
     } catch (error) {
       setUser(null)
@@ -50,19 +57,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  async function signIn() {
-    try {
-      await Auth.federatedSignIn({ provider: 'Google' })
-      await checkUser()
-    } catch (error) {
-      console.error('Error signing in:', error)
-      throw error
-    }
+  function signIn() {
+    signInWithRedirect({ provider: 'Google' })
   }
 
   async function signOut() {
     try {
-      await Auth.signOut()
+      await amplifySignOut()
       setUser(null)
     } catch (error) {
       console.error('Error signing out:', error)
@@ -72,9 +73,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function linkInstagram(handle: string) {
     try {
-      const user = await Auth.currentAuthenticatedUser()
-      await Auth.updateUserAttributes(user, {
-        'custom:instagram_handle': handle
+      await updateUserAttributes({
+        userAttributes: {
+          'custom:instagram_handle': handle
+        }
       })
       await checkUser()
     } catch (error) {
@@ -85,9 +87,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function linkYouTube(channel: string) {
     try {
-      const user = await Auth.currentAuthenticatedUser()
-      await Auth.updateUserAttributes(user, {
-        'custom:youtube_channel': channel
+      await updateUserAttributes({
+        userAttributes: {
+          'custom:youtube_channel': channel
+        }
       })
       await checkUser()
     } catch (error) {
@@ -98,9 +101,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function updateNavalNomadStatus(status: string) {
     try {
-      const user = await Auth.currentAuthenticatedUser()
-      await Auth.updateUserAttributes(user, {
-        'custom:naval_nomad_status': status
+      await updateUserAttributes({
+        userAttributes: {
+          'custom:naval_nomad_status': status
+        }
       })
       await checkUser()
     } catch (error) {

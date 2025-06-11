@@ -1,95 +1,20 @@
-resource "aws_cognito_user_pool" "naval_nomad" {
-  name = "naval-nomad-users"
-
-  # Password policy
-  password_policy {
-    minimum_length    = 8
-    require_lowercase = true
-    require_numbers   = true
-    require_symbols   = true
-    require_uppercase = true
-  }
-
-  # User attributes
-  schema {
-    name                = "email"
-    attribute_data_type = "String"
-    mutable            = true
-    required           = true
-  }
-
-  schema {
-    name                = "name"
-    attribute_data_type = "String"
-    mutable            = true
-    required           = true
-  }
-
-  schema {
-    name                = "naval_nomad_status"
-    attribute_data_type = "String"
-    mutable            = true
-    required           = false
-  }
-
-  schema {
-    name                = "instagram_handle"
-    attribute_data_type = "String"
-    mutable            = true
-    required           = false
-  }
-
-  schema {
-    name                = "youtube_channel"
-    attribute_data_type = "String"
-    mutable            = true
-    required           = false
-  }
-
-  # Verification message template
-  verification_message_template {
-    default_email_option = "CONFIRM_WITH_CODE"
-  }
-
-  # Admin create user config
-  admin_create_user_config {
-    allow_admin_create_user_only = false
-  }
-
-  # Auto verified attributes
-  auto_verified_attributes = ["email"]
-}
-
-# Google OAuth provider
-resource "aws_cognito_identity_provider" "google" {
-  user_pool_id  = aws_cognito_user_pool.naval_nomad.id
-  provider_name = "Google"
-  provider_type = "Google"
-
-  provider_details = {
-    authorize_scopes = "email profile openid"
-    client_id        = local.google_oauth.client_id
-    client_secret    = local.google_oauth.client_secret
-  }
-
-  attribute_mapping = {
-    email    = "email"
-    username = "sub"
-    name     = "name"
-  }
-}
-
 # User pool client
 resource "aws_cognito_user_pool_client" "naval_nomad" {
   name = "naval-nomad-web-client"
 
-  user_pool_id = aws_cognito_user_pool.naval_nomad.id
+  user_pool_id = data.terraform_remote_state.bootstrap.outputs.user_pool_id
 
   generate_secret = false
 
   # OAuth settings
-  callback_urls = ["https://${var.domain_name}/auth/callback"]
-  logout_urls   = ["https://${var.domain_name}"]
+  callback_urls = [
+    "https://${var.domain_name}/auth/callback",
+    "http://localhost:5173/auth/callback"
+  ]
+  logout_urls = [
+    "https://${var.domain_name}",
+    "http://localhost:5173"
+  ]
 
   allowed_oauth_flows = ["code"]
   allowed_oauth_scopes = ["email", "openid", "profile"]
@@ -121,6 +46,33 @@ resource "aws_cognito_user_pool_client" "naval_nomad" {
   enable_token_revocation = true
 }
 
+# Update the identity pool with the client configuration
+resource "aws_cognito_identity_pool_roles_attachment" "naval_nomad" {
+  identity_pool_id = data.terraform_remote_state.bootstrap.outputs.identity_pool_id
+  roles = {
+    "authenticated" = data.terraform_remote_state.bootstrap.outputs.cognito_auth_role_arn
+  }
+
+  role_mapping {
+    identity_provider = "cognito-idp.${data.aws_region.current.name}.amazonaws.com/${data.terraform_remote_state.bootstrap.outputs.user_pool_id}:${aws_cognito_user_pool_client.naval_nomad.id}"
+    type = "Token"
+    ambiguous_role_resolution = "AuthenticatedRole"
+  }
+}
+
+# Get current region
+data "aws_region" "current" {}
+
+# Data source to get bootstrap state
+data "terraform_remote_state" "bootstrap" {
+  backend = "s3"
+  config = {
+    bucket = "naval-nomad-terraform-state"
+    key    = "bootstrap/terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+
 # IAM role for Cognito
 resource "aws_iam_role" "cognito_auth_role" {
   name = "naval-nomad-cognito-auth-role"
@@ -136,7 +88,7 @@ resource "aws_iam_role" "cognito_auth_role" {
         }
         Condition = {
           StringEquals = {
-            "cognito-identity.amazonaws.com:aud" = aws_cognito_identity_pool.naval_nomad.id
+            "cognito-identity.amazonaws.com:aud" = data.terraform_remote_state.bootstrap.outputs.identity_pool_id
           }
         }
       }
@@ -144,26 +96,8 @@ resource "aws_iam_role" "cognito_auth_role" {
   })
 }
 
-# Identity pool
-resource "aws_cognito_identity_pool" "naval_nomad" {
-  identity_pool_name = "naval-nomad-identity-pool"
-  allow_unauthenticated_identities = false
-
-  cognito_identity_providers {
-    client_id               = aws_cognito_user_pool_client.naval_nomad.id
-    provider_name           = aws_cognito_user_pool.naval_nomad.endpoint
-    server_side_token_check = true
-  }
-}
-
 # Attach policies to the role
 resource "aws_iam_role_policy_attachment" "cognito_auth_policy" {
   role       = aws_iam_role.cognito_auth_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonCognito-DeveloperAuthenticatedIdentities"
 }
-
-# Add additional policy for Cognito Identity Pool access
-resource "aws_iam_role_policy_attachment" "cognito_identity_policy" {
-  role       = aws_iam_role.cognito_auth_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonCognito-DeveloperAuthenticatedIdentities"
-} 

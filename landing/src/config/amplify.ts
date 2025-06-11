@@ -1,4 +1,5 @@
 import { Amplify } from 'aws-amplify';
+import { cognitoUserPoolsTokenProvider } from 'aws-amplify/auth/cognito';
 
 // These values will be available after running `tofu apply` in the frontend directory
 // You'll need to:
@@ -7,18 +8,30 @@ import { Amplify } from 'aws-amplify';
 // 3. Get the Identity Pool ID from the AWS Console or terraform output
 // 4. Set your domain name (e.g., navalnomad.com)
 
-Amplify.configure({
+const isDevelopment = import.meta.env.DEV;
+
+const amplifyConfig = {
   Auth: {
-    region: 'us-east-1', // Change this to your AWS region
-    userPoolId: 'YOUR_USER_POOL_ID', // e.g., us-east-1_xxxxxxxx
-    userPoolWebClientId: 'YOUR_CLIENT_ID', // e.g., xxxxxxxxxxxxxxxxxxxxxxxxxx
-    identityPoolId: 'YOUR_IDENTITY_POOL_ID', // e.g., us-east-1:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-    oauth: {
-      domain: 'YOUR_COGNITO_DOMAIN', // e.g., naval-nomad.auth.region.amazoncognito.com
-      scope: ['email', 'profile', 'openid'],
-      redirectSignIn: 'https://YOUR_DOMAIN/auth/callback', // e.g., https://navalnomad.com/auth/callback
-      redirectSignOut: 'https://YOUR_DOMAIN', // e.g., https://navalnomad.com
-      responseType: 'code'
+    Cognito: {
+      userPoolId: 'us-east-1_iorZobDNZ',
+      userPoolClientId: 'naval-nomad-web-client',
+      identityPoolId: 'us-east-1:4dd49584-e018-46b6-a2f6-a3463930d1fb',
+      signUpVerificationMethod: 'code' as const,
+      loginWith: {
+        oauth: {
+          domain: 'naval-nomad.auth.us-east-1.amazoncognito.com',
+          scopes: ['email', 'profile', 'openid'],
+          responseType: 'code' as const,
+          redirectSignIn: isDevelopment 
+            ? ['http://localhost:5173/auth/callback']
+            : ['https://navalnomad.com/auth/callback'],
+          redirectSignOut: isDevelopment 
+            ? ['http://localhost:5173']
+            : ['https://navalnomad.com']
+        }
+      }
     }
   }
-}); 
+};
+
+Amplify.configure(amplifyConfig); 
