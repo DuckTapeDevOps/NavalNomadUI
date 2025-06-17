@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import LiveaboardGuides from './pages/LiveaboardGuides'
 import MarinaExplorer from './pages/MarinaExplorer'
 import RouteExplorer from './pages/Routes'
+import { MapPage } from './pages/MapPage'
 import { AuthProvider } from './contexts/AuthContext'
 import { signInWithRedirect } from 'aws-amplify/auth'
 import { useEffect } from 'react'
@@ -41,6 +42,7 @@ function App() {
               <Route path="/liveaboard-guides" element={<LiveaboardGuides />} />
               <Route path="/marina-explorer" element={<MarinaExplorer />} />
               <Route path="/routes" element={<RouteExplorer />} />
+              <Route path="/map" element={<MapPage />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
             </Routes>
           </Box>
