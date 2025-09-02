@@ -91,10 +91,6 @@ const Community = () => {
       >
         <Container maxW="container.xl">
           <VStack spacing={8} textAlign="center">
-            <Badge colorScheme="blue" fontSize="sm" px={3} py={1} borderRadius="full">
-              The Naval Nomad Doctrine
-            </Badge>
-            
             <Heading 
               as="h1" 
               size="3xl" 
@@ -111,7 +107,7 @@ const Community = () => {
             </Text>
             
             <Text fontSize="lg" maxW="3xl" color="gray.700" fontStyle="italic">
-              "The boat becomes the ultimate vehicle: your home, your gear, your pets, and your freedom, all afloat."
+              "You don't have to lose your community when you gain your freedom on the water."
             </Text>
           </VStack>
         </Container>
