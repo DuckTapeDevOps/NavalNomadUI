@@ -15,6 +15,13 @@ export const Navbar = () => {
           <Stack direction="row" spacing={4}>
             <Button
               as={RouterLink}
+              to="/community"
+              colorScheme="blue"
+            >
+              Community
+            </Button>
+            <Button
+              as={RouterLink}
               to="/liveaboard-guides"
               variant="ghost"
             >
@@ -36,15 +43,8 @@ export const Navbar = () => {
             </Button>
             <Button
               as={RouterLink}
-              to="/community"
-              variant="ghost"
-            >
-              Community
-            </Button>
-            <Button
-              as={RouterLink}
               to="/contact"
-              colorScheme="blue"
+              variant="ghost"
             >
               Contact
             </Button>
