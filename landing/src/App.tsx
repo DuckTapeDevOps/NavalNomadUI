@@ -1,10 +1,11 @@
 import { ChakraProvider, Box } from '@chakra-ui/react'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Navbar } from './components/Navbar'
 import Home from './pages/Home'
 import LiveaboardGuides from './pages/LiveaboardGuides'
 import MarinaExplorer from './pages/MarinaExplorer'
 import RouteExplorer from './pages/Routes'
+import Community from './pages/Community'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/liveaboard-guides" element={<LiveaboardGuides />} />
             <Route path="/marina-explorer" element={<MarinaExplorer />} />
             <Route path="/routes" element={<RouteExplorer />} />
+            <Route path="/community" element={<Community />} />
           </Routes>
         </Box>
       </Router>

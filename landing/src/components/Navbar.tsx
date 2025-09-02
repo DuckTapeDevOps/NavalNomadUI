@@ -36,6 +36,13 @@ export const Navbar = () => {
             </Button>
             <Button
               as={RouterLink}
+              to="/community"
+              variant="ghost"
+            >
+              Community
+            </Button>
+            <Button
+              as={RouterLink}
               to="/contact"
               colorScheme="blue"
             >
