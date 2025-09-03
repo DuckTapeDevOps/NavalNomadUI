@@ -18,6 +18,13 @@ export const Navbar = () => {
           <Stack direction="row" spacing={4}>
             <Button
               as={RouterLink}
+              to="/community"
+              colorScheme="blue"
+            >
+              Community
+            </Button>
+            <Button
+              as={RouterLink}
               to="/liveaboard-guides"
               variant="ghost"
             >
