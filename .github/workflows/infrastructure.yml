@@ -36,9 +36,9 @@ jobs:
       - name: Deploy Testing Infrastructure
         run: |
           cd landing/infrastructure/frontend
-          tofu init -backend-config=environments/testing/backend.tfvars
-          tofu plan -var-file=environments/testing/variables.tfvars
-          tofu apply -auto-approve -var-file=environments/testing/variables.tfvars
+          tofu init -backend-config=../environments/testing/backend.tfvars
+          tofu plan -var-file=../environments/testing/variables.tfvars
+          tofu apply -auto-approve -var-file=../environments/testing/variables.tfvars
       
       - name: Output Infrastructure Details
         run: |
