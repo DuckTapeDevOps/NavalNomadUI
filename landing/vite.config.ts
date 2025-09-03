@@ -12,8 +12,8 @@ export default defineConfig({
   },
   server: {
     host: true, // This enables listening on all network interfaces
-    port: 5173,
-    strictPort: true,
+    port: 3000,
+    strictPort: false, // Allow fallback to next available port
     watch: {
       usePolling: true, // This helps with WSL2 file system watching
     },
