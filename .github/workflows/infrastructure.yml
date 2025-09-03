@@ -2,7 +2,7 @@ name: Deploy Infrastructure
 
 on:
   push:
-    branches: [ main ]
+    # branches: [ main ]
     paths: 
       - 'landing/infrastructure/**'
   workflow_dispatch:
@@ -32,16 +32,16 @@ jobs:
           role-to-assume: ${{ env.AWS_ROLE_ARN }}
           aws-region: us-east-1
       
-      - name: Deploy Production Infrastructure
+      - name: Deploy Testing Infrastructure
         run: |
           cd landing/infrastructure
-          tofu init -backend-config=environments/production/backend.tfvars
-          tofu plan -var-file=environments/production/variables.tfvars
-          tofu apply -auto-approve -var-file=environments/production/variables.tfvars
+          tofu init -backend-config=environments/testing/backend.tfvars
+          tofu plan -var-file=environments/testing/variables.tfvars
+          tofu apply -auto-approve -var-file=environments/testing/variables.tfvars
       
       - name: Output Infrastructure Details
         run: |
           cd landing/infrastructure
           echo "S3 Bucket: $(tofu output -raw s3_bucket_name)"
           echo "CloudFront Distribution ID: $(tofu output -raw cloudfront_distribution_id)"
-          echo "Production URL: $(tofu output -raw preview_url)"
+          echo "Testing URL: $(tofu output -raw preview_url)"
