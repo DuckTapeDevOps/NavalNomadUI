@@ -8,7 +8,6 @@ import {
   Button, 
   SimpleGrid, 
   Icon,
-  Divider,
   Badge,
   useColorModeValue
 } from '@chakra-ui/react'
@@ -18,12 +17,9 @@ import {
   FaUsers, 
   FaMapMarkerAlt, 
   FaHeart, 
-  FaWifi, 
   FaUtensils,
-  FaMusic,
   FaComments,
-  FaRoute,
-  FaStar
+  FaRoute
 } from 'react-icons/fa'
 
 const Community = () => {
@@ -205,7 +201,7 @@ const Community = () => {
                   This Is Already Happening
                 </Heading>
                 <Text fontSize="lg" maxW="3xl" mx="auto" color="gray.600">
-                  These are real stories from real marinas. Imagine what happens when we connect them all.
+                  People find connection at marinas every day. Let’s make it easier, together.
                 </Text>
               </Box>
 
