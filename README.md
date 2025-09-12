@@ -1,12 +1,40 @@
-# Naval Nomad
+# Naval Nomad Community
 
-A platform connecting boat owners (Shiplords) with digital nomads seeking to live aboard boats.
+**Turning Marinas into Villages**
 
-<!-- Triggering new build -->
+A community-first platform designed to transform marinas from transient stops into vibrant maritime villages. By connecting boaters and creating digital infrastructure for real-world interactions, Naval Nomad enhances the marina experience while building lasting relationships among nautical enthusiasts.
+
+## Core Vision
+
+Naval Nomad focuses on community building first, with features that make boaters' lives easier added progressively based on user needs and feedback.
+
+## MVP Features
+
+### Community Building
+- **Connect Network**: Follow and connect with fellow boaters (like LinkedIn for the maritime community)
+- **Location Sharing**: See which marina your connections are currently docked at (with privacy controls)
+- **Marina Chat**: Location-specific conversations and community discussions
+- **User Profiles**: Vessel information, travel history, and personal maritime story
+
+### Privacy-First Location Sharing
+- **Public**: Region or town only
+- **Marina-level**: Exact marina visible to connections and fleetmates
+- **Precise berth**: Crew only, or explicit one-off sharing
+
+### Community Structure
+- **Crew**: People linked to a specific vessel with access to vessel dashboards
+- **Fleet**: Groups of vessels that travel together (temporary or ongoing)
+- **Connections**: Your broader maritime network
+
+## Coming Soon Features
+- **Event Management**: Marina events calendar and community meetups
+- **Journey Blogs**: Document and share maritime adventures
+- **Route Planning**: Advanced navigation and trip planning tools
+- **Marina Integration**: Tools for marina staff to enhance customer service
 
 ## Project Structure
 
-- `/landing` - React landing page built with Vite
+- `/landing` - React community platform built with Vite
 - `/terraform` - Infrastructure as Code for AWS deployment
 
 ## Development
@@ -24,57 +52,33 @@ npm run dev
 
 ## Deployment
 
-### GitHub Pages (Current)
+### Production (navalnomad.com)
 
-The site is automatically deployed to GitHub Pages when changes are pushed to the main branch.
+The site is automatically deployed when changes are pushed to the main branch via GitHub Actions.
 
-1. Build the landing page:
+1. Build the application:
 ```bash
 cd landing
 npm run build
 ```
 
-2. The GitHub Action will automatically deploy the site to GitHub Pages.
-
-### AWS S3 (Future)
-
-When ready to deploy to AWS:
-
-1. Build the landing page:
-```bash
-cd landing
-npm run build
-```
-
-2. Deploy to S3:
-```bash
-cd ../terraform
-terraform init
-terraform plan
-terraform apply
-```
-
-3. Upload the build files to S3:
-```bash
-aws s3 sync landing/dist/ s3://naval-nomad-landing/
-```
+2. The GitHub Action automatically deploys to AWS S3 + CloudFront.
 
 ## Infrastructure
 
 The project uses Terraform to manage AWS infrastructure:
-
 - S3 bucket for static website hosting
+- CloudFront for global CDN
 - Public access configuration
-- Website endpoint configuration
-
-## Future Enhancements
-
-- Route53 for custom domain
-- CloudFront for CDN
-- API Gateway for backend services
-- Database integration
-- Authentication system
 - GitHub Actions for CI/CD
+
+## Development Philosophy
+
+**Community First**: Every feature decision prioritizes building and strengthening the maritime community.
+
+**Progressive Enhancement**: Start with core social features, then add complexity based on user feedback.
+
+**Privacy by Design**: Location and personal information sharing is always opt-in with granular controls.
 
 ## License
 
