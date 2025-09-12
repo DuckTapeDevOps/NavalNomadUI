@@ -1,9 +1,14 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
 import { signInWithRedirect, signOut as amplifySignOut, getCurrentUser, fetchUserAttributes, updateUserAttributes } from 'aws-amplify/auth'
 
 interface CustomAttributes {
-  'custom:naval_nomad_status'?: string
+  'custom:vessel_name'?: string
+  'custom:vessel_type'?: string
+  'custom:home_marina'?: string
+  'custom:location_sharing_level'?: string
+  'custom:current_location'?: string
+  'custom:bio'?: string
   'custom:instagram_handle'?: string
   'custom:youtube_channel'?: string
 }
@@ -12,7 +17,12 @@ interface User {
   id: string
   email: string
   name: string
-  navalNomadStatus?: string
+  vesselName?: string
+  vesselType?: string
+  homeMarina?: string
+  locationSharingLevel?: 'public' | 'connections' | 'crew' | 'private'
+  currentLocation?: string
+  bio?: string
   instagramHandle?: string
   youtubeChannel?: string
 }
@@ -22,9 +32,9 @@ interface AuthContextType {
   loading: boolean
   signIn: () => void
   signOut: () => Promise<void>
-  linkInstagram: (handle: string) => Promise<void>
-  linkYouTube: (channel: string) => Promise<void>
-  updateNavalNomadStatus: (status: string) => Promise<void>
+  updateProfile: (updates: Partial<User>) => Promise<void>
+  updateLocationSharing: (level: 'public' | 'connections' | 'crew' | 'private') => Promise<void>
+  updateCurrentLocation: (location: string) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -46,7 +56,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         id: attributes.sub || '',
         email: attributes.email || '',
         name: attributes.name || '',
-        navalNomadStatus: attributes['custom:naval_nomad_status'],
+        vesselName: attributes['custom:vessel_name'],
+        vesselType: attributes['custom:vessel_type'],
+        homeMarina: attributes['custom:home_marina'],
+        locationSharingLevel: (attributes['custom:location_sharing_level'] as 'public' | 'connections' | 'crew' | 'private') || 'private',
+        currentLocation: attributes['custom:current_location'],
+        bio: attributes['custom:bio'],
         instagramHandle: attributes['custom:instagram_handle'],
         youtubeChannel: attributes['custom:youtube_channel']
       })
@@ -71,44 +86,51 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  async function linkInstagram(handle: string) {
+  async function updateProfile(updates: Partial<User>) {
     try {
-      await updateUserAttributes({
-        userAttributes: {
-          'custom:instagram_handle': handle
-        }
-      })
+      const userAttributes: Record<string, string> = {}
+      
+      if (updates.vesselName !== undefined) userAttributes['custom:vessel_name'] = updates.vesselName
+      if (updates.vesselType !== undefined) userAttributes['custom:vessel_type'] = updates.vesselType
+      if (updates.homeMarina !== undefined) userAttributes['custom:home_marina'] = updates.homeMarina
+      if (updates.locationSharingLevel !== undefined) userAttributes['custom:location_sharing_level'] = updates.locationSharingLevel
+      if (updates.currentLocation !== undefined) userAttributes['custom:current_location'] = updates.currentLocation
+      if (updates.bio !== undefined) userAttributes['custom:bio'] = updates.bio
+      if (updates.instagramHandle !== undefined) userAttributes['custom:instagram_handle'] = updates.instagramHandle
+      if (updates.youtubeChannel !== undefined) userAttributes['custom:youtube_channel'] = updates.youtubeChannel
+
+      await updateUserAttributes({ userAttributes })
       await checkUser()
     } catch (error) {
-      console.error('Error linking Instagram:', error)
+      console.error('Error updating profile:', error)
       throw error
     }
   }
 
-  async function linkYouTube(channel: string) {
+  async function updateLocationSharing(level: 'public' | 'connections' | 'crew' | 'private') {
     try {
       await updateUserAttributes({
         userAttributes: {
-          'custom:youtube_channel': channel
+          'custom:location_sharing_level': level
         }
       })
       await checkUser()
     } catch (error) {
-      console.error('Error linking YouTube:', error)
+      console.error('Error updating location sharing:', error)
       throw error
     }
   }
 
-  async function updateNavalNomadStatus(status: string) {
+  async function updateCurrentLocation(location: string) {
     try {
       await updateUserAttributes({
         userAttributes: {
-          'custom:naval_nomad_status': status
+          'custom:current_location': location
         }
       })
       await checkUser()
     } catch (error) {
-      console.error('Error updating Naval Nomad status:', error)
+      console.error('Error updating current location:', error)
       throw error
     }
   }
@@ -118,9 +140,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     signIn,
     signOut,
-    linkInstagram,
-    linkYouTube,
-    updateNavalNomadStatus
+    updateProfile,
+    updateLocationSharing,
+    updateCurrentLocation
   }
 
   return (
