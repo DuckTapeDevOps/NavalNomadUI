@@ -186,7 +186,7 @@ const Community = () => {
           <Box>
             <VStack spacing={8} align="stretch">
               <Box textAlign="center">
-                <Heading as="h2" size="2xl" mb={4} color="white">
+                <Heading as="h2" size="2xl" mb={4} color={useColorModeValue('navy.600', 'white')}>
                   This Is Already Happening
                 </Heading>
                 <Text fontSize="lg" maxW="3xl" mx="auto" color={useColorModeValue('gray.600', 'gray.300')}>
@@ -274,7 +274,7 @@ const Community = () => {
           <Box>
             <VStack spacing={8} align="stretch">
               <Box textAlign="center">
-                <Heading as="h2" size="2xl" mb={4} color="white">
+                <Heading as="h2" size="2xl" mb={4} color={useColorModeValue('navy.600', 'white')}>
                   This Is Already Happening
                 </Heading>
                 <Text fontSize="lg" maxW="4xl" mx="auto" color={useColorModeValue('gray.600', 'gray.300')}>
