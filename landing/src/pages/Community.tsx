@@ -275,7 +275,7 @@ const Community = () => {
             <VStack spacing={8} align="stretch">
               <Box textAlign="center">
                 <Heading as="h2" size="2xl" mb={4} color={useColorModeValue('navy.600', 'white')}>
-                  This Is Already Happening
+                  For Early Adopters
                 </Heading>
                 <Text fontSize="lg" maxW="4xl" mx="auto" color={useColorModeValue('gray.600', 'gray.300')}>
                   Here's what we're building:
