@@ -7,6 +7,16 @@
     <title>Naval Nomad - Live Your Dream Life at Sea</title>
   </head>
   <body>
+    <script>
+      try {
+        var colorModeKey = 'chakra-ui-color-mode';
+        var colorModeItem = localStorage.getItem(colorModeKey);
+        var colorMode = colorModeItem === 'dark' ? 'dark' : 'light';
+        if (colorMode === 'dark') {
+          document.body.classList.add('chakra-ui-dark');
+        }
+      } catch (e) {}
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
