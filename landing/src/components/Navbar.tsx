@@ -1,10 +1,8 @@
 import { Box, Flex, Button, Stack, useColorModeValue, Badge, IconButton, useColorMode } from '@chakra-ui/react'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
 
 export const Navbar = () => {
-  const { user, signIn, signOut } = useAuth()
   const { colorMode, toggleColorMode } = useColorMode()
   const location = useLocation()
   
@@ -102,22 +100,7 @@ export const Navbar = () => {
               variant="ghost"
               size="md"
             />
-            {user ? (
-              <Button
-                onClick={signOut}
-                colorScheme="blue"
-                variant="outline"
-              >
-                Sign Out
-              </Button>
-            ) : (
-              <Button
-                onClick={signIn}
-                colorScheme="blue"
-              >
-                Sign In
-              </Button>
-            )}
+            {/* Auth removed: no sign-in/out buttons */}
           </Stack>
         </Flex>
       </Flex>
