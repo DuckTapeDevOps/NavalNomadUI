@@ -35,7 +35,7 @@ Naval Nomad focuses on community building first, with features that make boaters
 ## Project Structure
 
 - `/landing` - React community platform built with Vite
-- `/terraform` - Infrastructure as Code for AWS deployment
+- `/landing/infrastructure` - OpenTofu/Terraform IaC for AWS (frontend hosting, CI/CD)
 
 ## Development
 
@@ -66,11 +66,12 @@ npm run build
 
 ## Infrastructure
 
-The project uses Terraform to manage AWS infrastructure:
-- S3 bucket for static website hosting
-- CloudFront for global CDN
-- Public access configuration
-- GitHub Actions for CI/CD
+The project uses OpenTofu/Terraform to manage AWS:
+- S3 bucket for static site (private) with CloudFront Origin Access
+- CloudFront distribution and ACM certificate
+- Route53 DNS for domain and aliases
+- S3 backend state with DynamoDB table for state locking
+- GitHub Actions (OIDC role) for CI/CD deployments
 
 ## Development Philosophy
 
